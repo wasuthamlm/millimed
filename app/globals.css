@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Overridable via inline style on the root layout wrapper from GlobalTheme (admin -> Settings) */
+  --color-brand-navy: var(--brand-navy, #16296b);
+  --color-brand-navy-dark: var(--brand-navy-dark, #0d1a4a);
+  --color-brand-gold: var(--brand-gold, #f5b301);
+  --color-brand-gold-dark: var(--brand-gold-dark, #d99a00);
+
+  --font-sans: var(--font-thai), var(--font-thai-fallback), sans-serif;
+  --font-heading: var(--font-thai), var(--font-thai-fallback), sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
