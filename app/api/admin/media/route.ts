@@ -16,6 +16,8 @@ export async function POST(request: Request) {
 
   const form = await request.formData().catch(() => null);
   const file = form?.get("file");
+  const folderIdRaw = form?.get("folderId");
+  const folderId = typeof folderIdRaw === "string" && folderIdRaw ? folderIdRaw : null;
 
   if (!file || !(file instanceof File)) {
     return NextResponse.json({ error: "ไม่พบไฟล์รูปภาพ" }, { status: 400 });
@@ -40,7 +42,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "อัปโหลดไม่สำเร็จ กรุณาลองใหม่อีกครั้ง" }, { status: 500 });
   }
 
-  const media = await Media.create({ url, filename: file.name, mimeType: file.type, size: file.size });
+  const media = await Media.create({ url, filename: file.name, mimeType: file.type, size: file.size, folderId });
 
   return NextResponse.json({ id: media.id, url: media.url }, { status: 201 });
 }

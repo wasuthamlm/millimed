@@ -16,7 +16,10 @@ export default {
       return token;
     },
     session({ session, token }) {
-      if (session.user) session.user.role = token.role as Role;
+      if (session.user) {
+        session.user.role = token.role as Role;
+        session.user.id = token.sub as string;
+      }
       return session;
     },
   },

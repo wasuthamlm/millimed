@@ -5,9 +5,15 @@ export type PageSectionData = {
   order: number;
   type: PageSection["type"];
   titleTh: string | null;
+  titleEn: string | null;
   bodyTh: string | null;
   itemsToShow: number | null;
   columns: number | null;
+  visibleDesktop: boolean;
+  visibleTablet: boolean;
+  visibleMobile: boolean;
+  anchorId: string | null;
+  imageUrl: string | null;
 };
 
 export type PageData = {
@@ -25,14 +31,23 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
   return {
     slug: page.slug,
     titleTh: page.titleTh,
-    sections: sections.map((s) => ({
-      id: s.id,
-      order: s.order,
-      type: s.type,
-      titleTh: s.titleTh,
-      bodyTh: s.bodyTh,
-      itemsToShow: s.itemsToShow,
-      columns: s.columns,
-    })),
+    sections: sections.map((s) => {
+      const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string };
+      return {
+        id: s.id,
+        order: s.order,
+        type: s.type,
+        titleTh: s.titleTh,
+        titleEn: s.titleEn,
+        bodyTh: s.bodyTh,
+        itemsToShow: s.itemsToShow,
+        columns: s.columns,
+        visibleDesktop: s.visibleDesktop,
+        visibleTablet: s.visibleTablet,
+        visibleMobile: s.visibleMobile,
+        anchorId: config.anchorId || null,
+        imageUrl: config.imageUrl || null,
+      };
+    }),
   };
 }

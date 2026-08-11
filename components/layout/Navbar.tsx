@@ -14,9 +14,10 @@ export function Navbar({ navLinks }: { navLinks: NavLink[] }) {
   return (
     <header className="sticky top-0 z-40 h-[72px] border-b border-slate-100 bg-white">
       <div className="flex h-full w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="ml-8 flex shrink-0 items-center gap-3">
-          <Image src="/logo.svg" alt="Millimed" width={36} height={36} />
-          <span className="text-lg font-bold text-brand-navy">Millimed</span>
+        <Link href="/" className="ml-15 flex shrink-0 items-center gap-3">
+          <div className="relative h-16 w-24 overflow-hidden sm:w-28">
+            <Image src="/logo-full.png" alt="Millimed" fill className="scale-125 object-contain" priority />
+          </div>
         </Link>
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden">

@@ -27,7 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (isRateLimited(`login:${email.toLowerCase()}`, 10, 15 * 60 * 1000)) return null;
 
         const user = await User.findOne({ where: { email } });
-        if (!user?.passwordHash) return null;
+        if (!user?.passwordHash || user.disabled) return null;
 
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
