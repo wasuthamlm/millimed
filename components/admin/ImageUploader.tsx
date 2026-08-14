@@ -69,7 +69,7 @@ export function ImageUploader({
           )}
         >
           {value ? (
-            <Image src={value} alt="" fill className="object-cover" unoptimized />
+            <Image src={value} alt="" fill sizes="128px" className="object-cover" unoptimized />
           ) : (
             <ImageIcon className="h-6 w-6 text-slate-300" />
           )}

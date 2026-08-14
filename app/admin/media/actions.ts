@@ -5,7 +5,7 @@ import { UniqueConstraintError } from "sequelize";
 import { revalidatePath } from "next/cache";
 import { Media, MediaFolder } from "@/lib/db/models/index";
 import { requireAdmin } from "@/lib/require-admin";
-import { deleteFromStorage } from "@/lib/media/local-storage";
+import { deleteFromStorage } from "@/lib/media/cloudinary-storage";
 
 type ActionResult = { error?: string };
 

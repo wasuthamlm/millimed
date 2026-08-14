@@ -5,7 +5,7 @@ import { LatestNews } from "@/components/home/LatestNews";
 import { ArticlesGrid } from "@/components/home/ArticlesGrid";
 import { BlockBodyText } from "@/components/site/BlockBodyText";
 import { getActiveBanners } from "@/lib/queries/banners";
-import { getLatestNews, getLatestArticles } from "@/lib/queries/posts";
+import { getLatestNews, getLatestArticles, getArticlesByCategory } from "@/lib/queries/posts";
 import { cn } from "@/lib/utils";
 import type { PageSectionData } from "@/lib/queries/pages";
 
@@ -28,7 +28,9 @@ async function renderSection(section: PageSectionData) {
       return <LatestNews title={section.titleTh ?? undefined} items={items} />;
     }
     case "ARTICLES": {
-      const items = await getLatestArticles(section.itemsToShow ?? 8);
+      const items = section.categoryId
+        ? await getArticlesByCategory(section.categoryId, section.itemsToShow ?? 100)
+        : await getLatestArticles(section.itemsToShow ?? 8);
       return <ArticlesGrid title={section.titleTh ?? undefined} items={items} columns={section.columns ?? undefined} />;
     }
     case "CTA_BAR":
@@ -46,7 +48,7 @@ async function renderSection(section: PageSectionData) {
             )}
             {section.imageUrl && (
               <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-2xl">
-                <Image src={section.imageUrl} alt={section.titleTh ?? ""} fill unoptimized className="object-cover" />
+                <Image src={section.imageUrl} alt={section.titleTh ?? ""} fill unoptimized sizes="(min-width: 768px) 672px, 100vw" className="object-cover" />
               </div>
             )}
             {section.bodyTh && (

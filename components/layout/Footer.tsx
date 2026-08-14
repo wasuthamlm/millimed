@@ -48,9 +48,8 @@ export function Footer({
     >
       <Container className={`grid gap-10 py-14 sm:grid-cols-2 ${gridColsClass}`}>
         <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <Image src="/logo.svg" alt="Millimed" width={32} height={32} />
-            <span className={config ? "text-lg font-bold" : "text-lg font-bold text-white"}>Millimed</span>
+          <div className="inline-flex w-fit items-center gap-2 rounded-lg bg-white px-2.5 py-1.5">
+            <Image src="/logo-full.png" alt="Millimed" width={128} height={91} className="h-9 w-auto object-contain" />
           </div>
           {contact?.tagline && (
             <p className={config ? "text-sm italic opacity-70" : "text-sm italic text-white/60"}>

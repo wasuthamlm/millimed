@@ -45,7 +45,7 @@ export default async function AdminUsersPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeader icon={UsersIcon} title="จัดการผู้ใช้งาน" subtitle={`ผู้ใช้งานทั้งหมด ${totalUsers} คน`} />
         <Link
           href="/admin/users/new"

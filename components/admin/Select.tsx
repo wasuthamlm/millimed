@@ -1,88 +1,89 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 import { ChevronDown } from "@/components/ui/icons";
-import { CheckIcon } from "@/components/ui/admin-icons";
+import { cn } from "@/lib/utils";
 
-export type SelectOption = { value: string; label: string; description?: string };
-
-export function Select({
+export function Select<T extends string>({
   value,
   options,
+  disabled,
   onChange,
-  placeholder,
-  className,
+  ariaLabel,
+  triggerClassName,
 }: {
-  value: string;
-  options: SelectOption[];
-  onChange: (value: string) => void;
-  placeholder?: string;
-  className?: string;
+  value: T;
+  options: { value: T; label: string }[];
+  disabled?: boolean;
+  onChange: (value: T) => void;
+  ariaLabel?: string;
+  triggerClassName: string;
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    const handleClick = (e: MouseEvent) => {
+    function handlePointerDown(e: MouseEvent) {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
-    };
-    const handleKey = (e: KeyboardEvent) => {
+    }
+    function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("mousedown", handleClick);
-    document.addEventListener("keydown", handleKey);
+    }
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener("mousedown", handleClick);
-      document.removeEventListener("keydown", handleKey);
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
 
   const selected = options.find((o) => o.value === value);
 
   return (
-    <div ref={rootRef} className={cn("relative", className)}>
+    <div ref={rootRef} className="relative inline-block">
       <button
         type="button"
+        disabled={disabled}
+        aria-label={ariaLabel}
+        aria-haspopup="listbox"
+        aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "flex w-full items-center gap-2 rounded-lg border bg-white px-3 py-2 text-left text-sm text-slate-700 outline-none transition-colors",
-          open ? "border-brand-navy ring-1 ring-brand-navy" : "border-slate-200 hover:border-slate-300"
+          "inline-flex cursor-pointer items-center gap-1 outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+          triggerClassName
         )}
       >
-        <span className="flex-1 truncate">{selected?.label ?? placeholder ?? "เลือก..."}</span>
-        <ChevronDown className={cn("h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform", open && "rotate-180")} />
+        <span className="truncate">{selected?.label ?? value}</span>
+        <ChevronDown className={cn("h-3 w-3 shrink-0 opacity-60 transition-transform", open && "rotate-180")} />
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-[calc(100%+6px)] z-20 max-h-64 overflow-auto rounded-xl border border-slate-100 bg-white py-1.5 shadow-lg shadow-slate-900/10">
-          {options.map((option) => {
-            const isActive = option.value === value;
-            return (
+        <ul
+          role="listbox"
+          aria-label={ariaLabel}
+          className="absolute left-0 top-full z-20 mt-1.5 min-w-full overflow-auto rounded-lg border border-slate-100 bg-white py-1 text-sm shadow-lg"
+        >
+          {options.map((o) => (
+            <li key={o.value}>
               <button
-                key={option.value}
                 type="button"
+                role="option"
+                aria-selected={o.value === value}
                 onClick={() => {
-                  onChange(option.value);
                   setOpen(false);
+                  if (o.value !== value) onChange(o.value);
                 }}
                 className={cn(
-                  "flex w-full items-start gap-2 px-3 py-2 text-left text-sm transition-colors",
-                  isActive ? "text-brand-navy" : "text-slate-600 hover:bg-slate-50"
+                  "block w-full whitespace-nowrap px-3 py-1.5 text-left transition-colors hover:bg-slate-50",
+                  o.value === value ? "font-medium text-brand-navy" : "text-slate-600"
                 )}
               >
-                <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center">
-                  {isActive && <CheckIcon className="h-3.5 w-3.5" />}
-                </span>
-                <span className="flex-1">
-                  <span className={cn("block truncate", isActive && "font-medium")}>{option.label}</span>
-                  {option.description && <span className="block text-xs text-slate-400">{option.description}</span>}
-                </span>
+                {o.label}
               </button>
-            );
-          })}
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

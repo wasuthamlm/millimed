@@ -16,6 +16,7 @@ export class Post extends Model<InferAttributes<Post>, InferCreationAttributes<P
   declare bodyTh: string | null;
   declare bodyEn: string | null;
   declare coverImageId: string | null;
+  declare galleryImageIds: CreationOptional<string[]>;
   declare categoryId: string | null;
   declare featured: CreationOptional<boolean>;
   declare publishedAt: Date | null;
@@ -42,6 +43,7 @@ Post.init(
     bodyTh: { type: DataTypes.TEXT, allowNull: true },
     bodyEn: { type: DataTypes.TEXT, allowNull: true },
     coverImageId: { type: DataTypes.UUID, allowNull: true },
+    galleryImageIds: { type: DataTypes.ARRAY(DataTypes.UUID), allowNull: false, defaultValue: [] },
     categoryId: { type: DataTypes.UUID, allowNull: true },
     featured: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     publishedAt: { type: DataTypes.DATE, allowNull: true },

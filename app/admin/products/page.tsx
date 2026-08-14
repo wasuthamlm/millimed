@@ -55,9 +55,9 @@ export default async function AdminProductsPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeader icon={BoxIcon} title="สินค้า" subtitle={`สินค้าทั้งหมด ${totalProducts} รายการ`} />
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/admin/products?status=ARCHIVED"
             className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
@@ -99,7 +99,7 @@ export default async function AdminProductsPage({
                     <div className="flex items-center gap-3">
                       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-slate-50">
                         {image ? (
-                          <Image src={image.url} alt={product.nameTh} fill className="object-cover" />
+                          <Image src={image.url} alt={product.nameTh} fill sizes="40px" className="object-cover" />
                         ) : (
                           <div className="flex h-full items-center justify-center text-[10px] text-slate-300">—</div>
                         )}

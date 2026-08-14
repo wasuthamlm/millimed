@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { TrashIcon } from "@/components/ui/admin-icons";
+import { Select } from "@/components/admin/Select";
 import { deleteMedia, moveMedia } from "@/app/admin/media/actions";
 
 export type MediaItem = { id: string; url: string; filename: string; folderId: string | null };
@@ -47,7 +48,14 @@ export function MediaGrid({ items, folders }: { items: MediaItem[]; folders: Fol
         {items.map((item) => (
           <div key={item.id} className="group flex flex-col gap-2 rounded-xl border border-slate-100 bg-white p-2 shadow-sm">
             <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-50">
-              <Image src={item.url} alt={item.filename} fill unoptimized className="object-cover" />
+              <Image
+                src={item.url}
+                alt={item.filename}
+                fill
+                unoptimized
+                sizes="(min-width: 1280px) 18vw, (min-width: 1024px) 22vw, (min-width: 640px) 30vw, 45vw"
+                className="object-cover"
+              />
               <button
                 type="button"
                 disabled={pending}
@@ -61,19 +69,14 @@ export function MediaGrid({ items, folders }: { items: MediaItem[]; folders: Fol
             <p className="truncate text-xs text-slate-500" title={item.filename}>
               {item.filename}
             </p>
-            <select
+            <Select
               value={item.folderId ?? ""}
               disabled={pending}
-              onChange={(e) => move(item.id, e.target.value)}
-              className="w-full rounded-md border border-slate-200 px-1.5 py-1 text-xs text-slate-600 focus:border-brand-navy focus:outline-none"
-            >
-              <option value="">— ไม่มีโฟลเดอร์ —</option>
-              {folders.map((folder) => (
-                <option key={folder.id} value={folder.id}>
-                  {folder.name}
-                </option>
-              ))}
-            </select>
+              onChange={(folderId) => move(item.id, folderId)}
+              ariaLabel="ย้ายไปโฟลเดอร์"
+              options={[{ value: "", label: "— ไม่มีโฟลเดอร์ —" }, ...folders.map((f) => ({ value: f.id, label: f.name }))]}
+              triggerClassName="w-full justify-between rounded-md border border-slate-200 px-1.5 py-1 text-xs text-slate-600 hover:border-brand-navy/40 focus:border-brand-navy"
+            />
           </div>
         ))}
       </div>

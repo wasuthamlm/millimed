@@ -44,7 +44,7 @@ export default async function AdminArticlesPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeader icon={FileTextIcon} title="บทความ" subtitle={`บทความทั้งหมด ${totalArticles} รายการ • เผยแพร่แล้ว ${publishedArticles}`} />
         <Link href="/admin/articles/new" className="inline-flex items-center gap-2 rounded-lg bg-brand-navy px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy-dark">
           <PlusIcon className="h-4 w-4" />

@@ -36,10 +36,11 @@ export default async function AdminLoginPage() {
         }
       >
         <Image
-          src={logo?.url || "/logo.svg"}
+          src={logo?.url || "/logo-full.png"}
           alt={siteSettings?.siteNameTh || "Millimed"}
-          width={40}
-          height={40}
+          width={logo?.url ? 40 : 128}
+          height={logo?.url ? 40 : 91}
+          className={logo?.url ? undefined : "h-10 w-auto object-contain"}
           unoptimized={!!logo?.url}
         />
         <div className="flex flex-col leading-tight">

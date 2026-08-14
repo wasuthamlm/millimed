@@ -36,6 +36,15 @@ export default async function ArticleDetailPage({
       </div>
       <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">{item.title}</h1>
       <p className="whitespace-pre-line text-base leading-relaxed text-slate-600">{item.bodyTh}</p>
+      {item.gallery.length > 0 && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {item.gallery.map((url, i) => (
+            <div key={url} className="relative aspect-square overflow-hidden rounded-xl bg-slate-50">
+              <Image src={url} alt={`${item.title} ${i + 1}`} fill sizes="(min-width: 640px) 33vw, 50vw" className="object-cover" />
+            </div>
+          ))}
+        </div>
+      )}
     </Container>
   );
 }

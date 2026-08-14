@@ -240,7 +240,7 @@ export function HeaderAppearanceForm({ initial, navLinks }: { initial: HeaderCon
                   const active = i === activePreview;
                   return (
                     <button
-                      key={link.href}
+                      key={link.label}
                       type="button"
                       onClick={() => setActivePreview(i)}
                       className={cn(

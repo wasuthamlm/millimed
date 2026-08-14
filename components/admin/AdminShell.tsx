@@ -58,7 +58,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center justify-between gap-2 border-b border-white/10 px-5 py-4">
           <Link href="/admin" className="flex items-center gap-2 overflow-hidden">
-            <Image src="/logo.svg" alt="Millimed" width={32} height={32} className="shrink-0" />
+            <div className="flex shrink-0 items-center justify-center rounded-md bg-white p-1">
+              <Image src="/logo-full.png" alt="Millimed" width={128} height={91} className="h-6 w-auto object-contain" />
+            </div>
             {!collapsed && (
               <span className="flex flex-col leading-tight">
                 <span className="whitespace-nowrap text-sm font-bold text-white">มิลลิเมด</span>

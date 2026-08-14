@@ -2,7 +2,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import { Media } from "@/lib/db/models/index";
 import { requireAdmin } from "@/lib/require-admin";
-import { uploadToStorage } from "@/lib/media/local-storage";
+import { uploadToStorage } from "@/lib/media/cloudinary-storage";
 
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"]);
 const MAX_SIZE = 5 * 1024 * 1024;

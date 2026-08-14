@@ -30,7 +30,7 @@ export function SectionPreviewBody({
       }
       return (
         <div className="relative h-48 w-full sm:h-64">
-          <Image src={active.image} alt={active.titleTh} fill className="object-cover" />
+          <Image src={active.image} alt={active.titleTh} fill sizes="100vw" className="object-cover" />
         </div>
       );
     }

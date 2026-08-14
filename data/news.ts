@@ -2,6 +2,7 @@ export type NewsItem = {
   slug: string;
   title: string;
   image: string;
+  gallery: string[];
   excerpt: string;
   publishedAt: string;
   bodyTh: string;
@@ -12,6 +13,7 @@ export const newsItems: NewsItem[] = [
     slug: "millimed-shares-love-2026",
     title: "Millimed Shares Love ส่งต่อความสุขสู่ชุมชน",
     image: "/images/placeholder-news-1.png",
+    gallery: [],
     excerpt: "กิจกรรมเพื่อสังคมประจำปี มอบเวชภัณฑ์และทุนการศึกษาแก่ชุมชนโดยรอบโรงงาน",
     publishedAt: "2026-06-15",
     bodyTh:
@@ -21,6 +23,7 @@ export const newsItems: NewsItem[] = [
     slug: "new-factory-certification",
     title: "โรงงานมิลลิเมดผ่านมาตรฐาน GMP PIC/S",
     image: "/images/placeholder-news-2.png",
+    gallery: [],
     excerpt: "ตอกย้ำคุณภาพการผลิตระดับสากลด้วยมาตรฐาน GMP PIC/S",
     publishedAt: "2026-05-02",
     bodyTh:
@@ -30,6 +33,7 @@ export const newsItems: NewsItem[] = [
     slug: "education-scholarship-2026",
     title: "Millimed for Education มอบทุนการศึกษาแก่นักศึกษาเภสัชศาสตร์",
     image: "/images/placeholder-news-3.png",
+    gallery: [],
     excerpt: "โครงการมอบทุนการศึกษาต่อเนื่องสำหรับนักศึกษาสาขาเภสัชศาสตร์",
     publishedAt: "2026-03-20",
     bodyTh:
@@ -39,6 +43,7 @@ export const newsItems: NewsItem[] = [
     slug: "kick-off-outing-2026",
     title: "กิจกรรม Kick off & Outing ประจำปี 2569",
     image: "/images/placeholder-news-4.png",
+    gallery: [],
     excerpt: "กิจกรรมสร้างความสัมพันธ์และขวัญกำลังใจให้แก่พนักงานทุกฝ่าย",
     publishedAt: "2026-01-18",
     bodyTh:

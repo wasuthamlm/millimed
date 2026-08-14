@@ -45,7 +45,7 @@ export function BannersManager({ initialBanners }: { initialBanners: Banner[] })
           {banners.map((banner, index) => (
             <div key={banner.id} className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:flex-row">
               <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-lg sm:w-48">
-                <Image src={banner.image} alt={banner.titleTh} fill className="object-cover" />
+                <Image src={banner.image} alt={banner.titleTh} fill sizes="(min-width: 640px) 192px, 100vw" className="object-cover" />
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <div>

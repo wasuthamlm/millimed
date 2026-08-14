@@ -37,7 +37,7 @@ export default async function AdminMediaPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeader icon={ImageIcon} title="คลังสื่อ" subtitle={`ไฟล์ทั้งหมด ${totalCount} รายการ`} />
         <MediaUploader folderId={activeFolderId} />
       </div>
