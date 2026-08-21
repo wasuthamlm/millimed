@@ -36,6 +36,7 @@ export function PageEditor({
   navLinkCount,
   articleCount,
   newsCount,
+  articleCategories,
   previewArticles,
   previewNews,
   previewBanners,
@@ -56,6 +57,7 @@ export function PageEditor({
   navLinkCount: number;
   articleCount: number;
   newsCount: number;
+  articleCategories: { id: string; nameTh: string; count: number }[];
   previewArticles: ArticleItem[];
   previewNews: NewsItem[];
   previewBanners: HeroBannerItem[];
@@ -123,6 +125,7 @@ export function PageEditor({
       bodyTh: s.bodyTh,
       anchorId: s.anchorId,
       imageUrl: s.imageUrl,
+      categoryId: s.categoryId,
       itemsToShow: s.itemsToShow,
       columns: s.columns,
       visibleDesktop: s.visibleDesktop,
@@ -312,6 +315,7 @@ export function PageEditor({
                 onSave={doSave}
                 articleCount={articleCount}
                 newsCount={newsCount}
+                articleCategories={articleCategories}
               />
             ) : (
               <div className="flex flex-col items-center gap-2 px-6 py-16 text-center text-sm text-slate-400">

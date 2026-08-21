@@ -30,7 +30,7 @@ export function SectionPreviewBody({
       }
       return (
         <div className="relative h-48 w-full sm:h-64">
-          <Image src={active.image} alt={active.titleTh} fill sizes="100vw" className="object-cover" />
+          <Image src={active.image} alt={active.titleTh} fill sizes="100vw" className="object-cover" unoptimized />
         </div>
       );
     }
@@ -70,14 +70,16 @@ export function SectionPreviewBody({
       );
     case "LATEST_NEWS":
       return <LatestNews title={section.titleTh || undefined} items={previewNews.slice(0, section.itemsToShow ?? 3)} />;
-    case "ARTICLES":
+    case "ARTICLES": {
+      const filtered = section.categoryId ? previewArticles.filter((a) => a.categoryId === section.categoryId) : previewArticles;
       return (
         <ArticlesGrid
           title={section.titleTh || undefined}
-          items={previewArticles.slice(0, section.itemsToShow ?? 8)}
+          items={filtered.slice(0, section.itemsToShow ?? 8)}
           columns={section.columns ?? undefined}
         />
       );
+    }
     default:
       return null;
   }

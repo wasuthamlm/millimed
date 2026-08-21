@@ -29,7 +29,7 @@ export function PopupManager({ initialConfig }: { initialConfig: PopupConfig }) 
 
         <div className="grid gap-5 sm:grid-cols-[200px_1fr]">
           <div className="relative h-32 overflow-hidden rounded-lg bg-slate-100">
-            <Image src={config.image} alt={config.titleTh} fill sizes="(min-width: 640px) 200px, 100vw" className="object-cover" />
+            <Image src={config.image} alt={config.titleTh} fill sizes="(min-width: 640px) 200px, 100vw" className="object-cover" unoptimized />
           </div>
 
           <div className="flex flex-col gap-4">

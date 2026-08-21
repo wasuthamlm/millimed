@@ -4,6 +4,7 @@ export type ArticleItem = {
   image: string;
   gallery: string[];
   bodyTh: string;
+  categoryId?: string | null;
 };
 
 export const articleItems: ArticleItem[] = [

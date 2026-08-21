@@ -25,6 +25,7 @@ function toArticleItem(row: Post, gallery: string[] = []): ArticleItem {
     image,
     gallery,
     bodyTh: row.bodyTh ?? "",
+    categoryId: row.categoryId ?? null,
   };
 }
 

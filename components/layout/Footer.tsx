@@ -113,7 +113,7 @@ export function Footer({
             <ul className="flex flex-col gap-2 text-sm">
               {contact.phone && <li>โทร: {contact.phone}</li>}
               {contact.email && <li>อีเมล: {contact.email}</li>}
-              {contact.address && <li>{contact.address}</li>}
+              {contact.address?.split("\n").filter(Boolean).map((line, i) => <li key={i}>{line}</li>)}
             </ul>
           </div>
         )}

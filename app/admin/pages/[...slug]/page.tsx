@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
+import { fn, col } from "sequelize";
 import { PageEditor } from "@/components/admin/pages/PageEditor";
-import { Page, PageSection, NavLink, Post } from "@/lib/db/models/index";
+import { Page, PageSection, NavLink, Post, ArticleCategory } from "@/lib/db/models/index";
 import { getLatestArticles, getLatestNews } from "@/lib/queries/posts";
 import { getActiveBanners } from "@/lib/queries/banners";
 import { getHeaderNavLinks } from "@/lib/queries/nav";
@@ -17,10 +18,10 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
   const page = await Page.findOne({ where: { slug } });
   if (!page) notFound();
 
-  const [sections, previewArticles, previewNews, previewBanners, navLinks, footerData, social, navLinkCount, articleCount, newsCount] =
+  const [sections, previewArticles, previewNews, previewBanners, navLinks, footerData, social, navLinkCount, articleCount, newsCount, categories, categoryCounts] =
     await Promise.all([
       PageSection.findAll({ where: { pageId: page.id }, order: [["order", "ASC"]] }),
-      getLatestArticles(12),
+      getLatestArticles(100),
       getLatestNews(6),
       getActiveBanners(),
       getHeaderNavLinks(),
@@ -29,10 +30,20 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
       NavLink.count({ where: { href: slug === "home" ? "/" : `/${slug}` } }),
       Post.count({ where: { kind: "ARTICLE", status: "PUBLISHED" } }),
       Post.count({ where: { kind: "NEWS", status: "PUBLISHED" } }),
+      ArticleCategory.findAll({ order: [["order", "ASC"], ["nameTh", "ASC"]] }),
+      Post.findAll({
+        where: { kind: "ARTICLE", status: "PUBLISHED" },
+        attributes: ["categoryId", [fn("COUNT", col("id")), "count"]],
+        group: ["categoryId"],
+        raw: true,
+      }) as unknown as Promise<{ categoryId: string | null; count: string }[]>,
     ]);
 
+  const countByCategory = new Map(categoryCounts.map((c) => [c.categoryId, Number(c.count)]));
+  const articleCategories = categories.map((c) => ({ id: c.id, nameTh: c.nameTh, count: countByCategory.get(c.id) ?? 0 }));
+
   const initialSections = sections.map((s) => {
-    const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string };
+    const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string; categoryId?: string };
     return {
       id: s.id,
       type: s.type,
@@ -41,6 +52,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
       bodyTh: s.bodyTh ?? "",
       anchorId: config.anchorId ?? "",
       imageUrl: config.imageUrl ?? "",
+      categoryId: config.categoryId ?? null,
       itemsToShow: s.itemsToShow,
       columns: s.columns,
       visibleDesktop: s.visibleDesktop,
@@ -81,6 +93,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
       navLinkCount={navLinkCount}
       articleCount={articleCount}
       newsCount={newsCount}
+      articleCategories={articleCategories}
       previewArticles={previewArticles}
       previewNews={previewNews}
       previewBanners={previewBanners}

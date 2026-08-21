@@ -1,43 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { SiteHeaderConfig } from "@/lib/db/models/index";
 import { requireAdmin } from "@/lib/require-admin";
+import * as headerConfigService from "@/lib/services/header-config";
+import type { HeaderConfigInput } from "@/lib/services/header-config";
 
-export type HeaderConfigInput = {
-  layout: string;
-  height: string;
-  shadow: string;
-  position: string;
-  bgColor: string;
-  textColor: string;
-  hoverBgColor: string;
-  hoverTextColor: string;
-  activeBgColor: string;
-  activeTextColor: string;
-  iconTextColor: string;
-  logoMode: string;
-  logoTextTh: string;
-  logoTextEn: string;
-  menuWrap: string;
-  menuFontSize: string;
-  menuLevels: number;
-  submenuStyle: string;
-  submenuChildBehavior: string;
-  showSearch: boolean;
-  showLanguage: boolean;
-  showAccount: boolean;
-  showCart: boolean;
-};
+export type { HeaderConfigInput };
 
 export async function saveHeaderConfig(input: HeaderConfigInput) {
   await requireAdmin();
-
-  const data = { ...input, logoTextTh: input.logoTextTh || null, logoTextEn: input.logoTextEn || null };
-
-  const [row] = await SiteHeaderConfig.findOrCreate({ where: { id: "singleton" }, defaults: { id: "singleton", ...data } });
-  await row.update(data);
-
+  await headerConfigService.saveHeaderConfig(input);
   revalidatePath("/admin/site/header");
   revalidatePath("/", "layout");
 }

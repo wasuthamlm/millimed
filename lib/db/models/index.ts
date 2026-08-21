@@ -23,6 +23,7 @@ import { SiteSettings } from "./SiteSettings";
 import { GlobalTheme } from "./GlobalTheme";
 import { AiSettings } from "./AiSettings";
 import { Translation } from "./Translation";
+import { ApiKey } from "./ApiKey";
 
 // Dev-mode HMR / Turbopack can re-evaluate this module (with fresh model class
 // references) independently of any external flag, so a single global boolean
@@ -101,4 +102,5 @@ export {
   GlobalTheme,
   AiSettings,
   Translation,
+  ApiKey,
 };

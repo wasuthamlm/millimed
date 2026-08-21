@@ -1,18 +1,10 @@
 "use server";
 
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { NavLink, sequelize } from "@/lib/db/models/index";
 import { requireAdmin } from "@/lib/require-admin";
-
-const navLinkSchema = z.object({
-  labelTh: z.string().min(1, "จำเป็นต้องระบุชื่อเมนู").max(120),
-  labelEn: z.string().max(120).optional().or(z.literal("")),
-  // Empty href is allowed for a parent item that only hosts a hover dropdown for its
-  // children (e.g. "รู้จักเรา") — NavDropdown.tsx renders it non-clickable in that case.
-  href: z.string().max(300),
-  parentId: z.string().nullable(),
-});
+import { ServiceError } from "@/lib/services/errors";
+import * as navLinkService from "@/lib/services/nav-links";
+import type { NavLinkInput } from "@/lib/services/nav-links";
 
 type ActionResult = { error?: string };
 
@@ -21,56 +13,38 @@ function revalidateAll() {
   revalidatePath("/", "layout");
 }
 
-export async function createNavLink(input: z.infer<typeof navLinkSchema>): Promise<ActionResult> {
-  await requireAdmin();
-  const parsed = navLinkSchema.safeParse(input);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง" };
-
-  const siblingCount = await NavLink.count({ where: { parentId: parsed.data.parentId, placement: "HEADER" } });
-
-  await NavLink.create({
-    labelTh: parsed.data.labelTh,
-    labelEn: parsed.data.labelEn || null,
-    href: parsed.data.href,
-    parentId: parsed.data.parentId,
-    order: siblingCount,
-    placement: "HEADER",
-  });
-
-  revalidateAll();
-  return {};
+async function run(fn: () => Promise<unknown>): Promise<ActionResult> {
+  try {
+    await fn();
+    revalidateAll();
+    return {};
+  } catch (err) {
+    if (err instanceof ServiceError) return { error: err.message };
+    throw err;
+  }
 }
 
-export async function updateNavLink(id: string, input: z.infer<typeof navLinkSchema>): Promise<ActionResult> {
+export async function createNavLink(input: NavLinkInput): Promise<ActionResult> {
   await requireAdmin();
-  const parsed = navLinkSchema.safeParse(input);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง" };
+  return run(() => navLinkService.createNavLink(input));
+}
 
-  await NavLink.update({ labelTh: parsed.data.labelTh, labelEn: parsed.data.labelEn || null, href: parsed.data.href }, { where: { id } });
-
-  revalidateAll();
-  return {};
+export async function updateNavLink(id: string, input: NavLinkInput): Promise<ActionResult> {
+  await requireAdmin();
+  return run(() => navLinkService.updateNavLink(id, input));
 }
 
 export async function deleteNavLink(id: string): Promise<ActionResult> {
   await requireAdmin();
-  await NavLink.destroy({ where: { id } });
-  revalidateAll();
-  return {};
+  return run(() => navLinkService.deleteNavLink(id));
 }
 
 export async function toggleNavLink(id: string, active: boolean): Promise<ActionResult> {
   await requireAdmin();
-  await NavLink.update({ active }, { where: { id } });
-  revalidateAll();
-  return {};
+  return run(() => navLinkService.toggleNavLink(id, active));
 }
 
 export async function reorderNavLinks(ids: string[]): Promise<ActionResult> {
   await requireAdmin();
-  await sequelize.transaction(async (t) => {
-    await Promise.all(ids.map((id, index) => NavLink.update({ order: index }, { where: { id }, transaction: t })));
-  });
-  revalidateAll();
-  return {};
+  return run(() => navLinkService.reorderNavLinks(ids));
 }

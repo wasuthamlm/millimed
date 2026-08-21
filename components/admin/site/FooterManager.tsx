@@ -201,9 +201,14 @@ export function FooterManager({
             <label className="mb-1.5 block text-xs font-medium text-slate-500">อีเมล</label>
             <input type="text" value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} className={inputClass} />
           </div>
-          <div>
+          <div className="sm:col-span-2">
             <label className="mb-1.5 block text-xs font-medium text-slate-500">ที่อยู่</label>
-            <input type="text" value={contact.address} onChange={(e) => setContact({ ...contact, address: e.target.value })} className={inputClass} />
+            <textarea
+              value={contact.address}
+              onChange={(e) => setContact({ ...contact, address: e.target.value })}
+              rows={5}
+              className={cn(inputClass, "resize-y")}
+            />
           </div>
         </div>
       </div>

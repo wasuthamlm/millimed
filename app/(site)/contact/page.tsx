@@ -40,7 +40,7 @@ export default async function ContactPage() {
             {contact?.address && (
               <li>
                 <span className="block text-xs text-slate-400">ที่อยู่</span>
-                {contact.address}
+                <span className="whitespace-pre-line leading-relaxed">{contact.address}</span>
               </li>
             )}
           </ul>

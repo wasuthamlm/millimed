@@ -20,16 +20,20 @@ export function SectionSettingsPanel({
   onSave,
   articleCount,
   newsCount,
+  articleCategories,
 }: {
   section: PageSectionRow;
   onChange: (patch: Partial<PageSectionRow>) => void;
   onSave: () => Promise<void>;
   articleCount: number;
   newsCount: number;
+  articleCategories: { id: string; nameTh: string; count: number }[];
 }) {
   const isTextBlock = section.type === "COMPANY_INTRO" || section.type === "CUSTOM";
   const hasDataBinding = section.type === "ARTICLES" || section.type === "LATEST_NEWS";
-  const matched = section.type === "ARTICLES" ? articleCount : section.type === "LATEST_NEWS" ? newsCount : 0;
+  const selectedCategory = section.type === "ARTICLES" && section.categoryId ? articleCategories.find((c) => c.id === section.categoryId) : undefined;
+  const matched =
+    section.type === "ARTICLES" ? (selectedCategory ? selectedCategory.count : articleCount) : section.type === "LATEST_NEWS" ? newsCount : 0;
 
   return (
     <div className="border-t border-slate-100 bg-slate-50/60 px-4 py-5">
@@ -146,6 +150,24 @@ export function SectionSettingsPanel({
                 <option value="news">ข่าวสาร</option>
               </select>
             </div>
+            {section.type === "ARTICLES" && (
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-slate-500">หมวดหมู่บทความ</label>
+                <select
+                  value={section.categoryId ?? ""}
+                  onChange={(e) => onChange({ categoryId: e.target.value || null })}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-navy"
+                >
+                  <option value="">ทุกหมวดหมู่ (บทความล่าสุด)</option>
+                  {articleCategories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nameTh} ({c.count})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <p className="flex items-center gap-1.5 text-sm font-medium text-emerald-600">
               <CheckIcon className="h-4 w-4" />
               พบ {matched} รายการตรงเงื่อนไข

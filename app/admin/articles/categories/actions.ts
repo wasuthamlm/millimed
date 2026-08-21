@@ -1,16 +1,10 @@
 "use server";
 
-import { z } from "zod";
-import { UniqueConstraintError } from "sequelize";
 import { revalidatePath } from "next/cache";
-import { ArticleCategory, sequelize } from "@/lib/db/models/index";
 import { requireAdmin } from "@/lib/require-admin";
-
-const categorySchema = z.object({
-  nameTh: z.string().min(1, "จำเป็นต้องระบุชื่อไทย").max(120),
-  nameEn: z.string().max(120).optional().or(z.literal("")),
-  slug: z.string().min(1).max(120),
-});
+import { ServiceError } from "@/lib/services/errors";
+import * as articleCategoryService from "@/lib/services/article-categories";
+import type { ArticleCategoryInput } from "@/lib/services/article-categories";
 
 function revalidateAll() {
   revalidatePath("/admin/articles/categories");
@@ -19,59 +13,38 @@ function revalidateAll() {
   revalidatePath("/news");
 }
 
-export async function createArticleCategory(input: z.infer<typeof categorySchema>) {
-  await requireAdmin();
-  const parsed = categorySchema.safeParse(input);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง" };
-
+async function run(fn: () => Promise<unknown>): Promise<{ error?: string }> {
   try {
-    await ArticleCategory.create({ nameTh: parsed.data.nameTh, nameEn: parsed.data.nameEn || null, slug: parsed.data.slug });
+    await fn();
     revalidateAll();
     return {};
   } catch (err) {
-    if (err instanceof UniqueConstraintError) {
-      return { error: "Slug นี้ถูกใช้แล้ว" };
-    }
+    if (err instanceof ServiceError) return { error: err.message };
     throw err;
   }
 }
 
-export async function updateArticleCategory(id: string, input: z.infer<typeof categorySchema>) {
+export async function createArticleCategory(input: ArticleCategoryInput) {
   await requireAdmin();
-  const parsed = categorySchema.safeParse(input);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "ข้อมูลไม่ถูกต้อง" };
+  return run(() => articleCategoryService.createArticleCategory(input));
+}
 
-  try {
-    await ArticleCategory.update({ nameTh: parsed.data.nameTh, nameEn: parsed.data.nameEn || null, slug: parsed.data.slug }, { where: { id } });
-    revalidateAll();
-    return {};
-  } catch (err) {
-    if (err instanceof UniqueConstraintError) {
-      return { error: "Slug นี้ถูกใช้แล้ว" };
-    }
-    throw err;
-  }
+export async function updateArticleCategory(id: string, input: ArticleCategoryInput) {
+  await requireAdmin();
+  return run(() => articleCategoryService.updateArticleCategory(id, input));
 }
 
 export async function deleteArticleCategory(id: string) {
   await requireAdmin();
-  await ArticleCategory.destroy({ where: { id } });
-  revalidateAll();
-  return {};
+  return run(() => articleCategoryService.deleteArticleCategory(id));
 }
 
 export async function toggleArticleCategory(id: string, active: boolean) {
   await requireAdmin();
-  await ArticleCategory.update({ active }, { where: { id } });
-  revalidateAll();
-  return {};
+  return run(() => articleCategoryService.toggleArticleCategory(id, active));
 }
 
 export async function reorderArticleCategories(ids: string[]) {
   await requireAdmin();
-  await sequelize.transaction(async (t) => {
-    await Promise.all(ids.map((id, index) => ArticleCategory.update({ order: index }, { where: { id }, transaction: t })));
-  });
-  revalidateAll();
-  return {};
+  return run(() => articleCategoryService.reorderArticleCategories(ids));
 }
