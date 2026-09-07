@@ -10,6 +10,7 @@ export type PageSectionInput = {
   bodyTh: string;
   anchorId: string;
   imageUrl: string;
+  videoUrl: string;
   categoryId: string | null;
   itemsToShow: number | null;
   columns: number | null;
@@ -37,7 +38,12 @@ export async function saveSections(pageId: string, sections: PageSectionInput[])
         visibleDesktop: s.visibleDesktop,
         visibleTablet: s.visibleTablet,
         visibleMobile: s.visibleMobile,
-        config: { anchorId: s.anchorId || undefined, imageUrl: s.imageUrl || undefined, categoryId: s.categoryId || undefined },
+        config: {
+          anchorId: s.anchorId || undefined,
+          imageUrl: s.imageUrl || undefined,
+          videoUrl: s.videoUrl || undefined,
+          categoryId: s.categoryId || undefined,
+        },
       })),
       { transaction: t }
     );

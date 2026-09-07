@@ -13,6 +13,7 @@ export function AddBlockButton({ onAdd, className }: { onAdd: (section: PageSect
       bodyTh: "",
       anchorId: "",
       imageUrl: "",
+      videoUrl: "",
       categoryId: null,
       itemsToShow: null,
       columns: null,

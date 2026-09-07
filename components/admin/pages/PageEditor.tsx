@@ -125,6 +125,7 @@ export function PageEditor({
       bodyTh: s.bodyTh,
       anchorId: s.anchorId,
       imageUrl: s.imageUrl,
+      videoUrl: s.videoUrl,
       categoryId: s.categoryId,
       itemsToShow: s.itemsToShow,
       columns: s.columns,

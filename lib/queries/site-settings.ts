@@ -1,4 +1,39 @@
-import { SiteSettings, GlobalTheme } from "@/lib/db/models/index";
+import { SiteSettings, GlobalTheme, Media } from "@/lib/db/models/index";
+
+export type SiteMetaData = {
+  siteNameTh: string;
+  siteUrl: string | null;
+  faviconUrl: string | null;
+  seoMetaTitleTh: string | null;
+  seoMetaDescTh: string | null;
+  gtmId: string | null;
+  ga4Id: string | null;
+  fbPixelId: string | null;
+  tiktokPixelId: string | null;
+};
+
+export async function getSiteMeta(): Promise<SiteMetaData> {
+  const row = await SiteSettings.findByPk("singleton");
+  const favicon = row?.faviconId ? await Media.findByPk(row.faviconId) : null;
+  return {
+    siteNameTh: row?.siteNameTh || "Millimed",
+    siteUrl: row?.siteUrl ?? null,
+    faviconUrl: favicon?.url ?? null,
+    seoMetaTitleTh: row?.seoMetaTitleTh ?? null,
+    seoMetaDescTh: row?.seoMetaDescTh ?? null,
+    gtmId: row?.gtmId ?? null,
+    ga4Id: row?.ga4Id ?? null,
+    fbPixelId: row?.fbPixelId ?? null,
+    tiktokPixelId: row?.tiktokPixelId ?? null,
+  };
+}
+
+export async function getSiteLogo(): Promise<string | null> {
+  const row = await SiteSettings.findByPk("singleton");
+  if (!row?.logoId) return null;
+  const logo = await Media.findByPk(row.logoId);
+  return logo?.url ?? null;
+}
 
 export type SiteSocialData = {
   facebookUrl: string | null;

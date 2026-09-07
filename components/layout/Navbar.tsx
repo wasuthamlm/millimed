@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { NavDropdown } from "./NavDropdown";
 import { MobileNav } from "./MobileNav";
 
-export function Navbar({ navLinks }: { navLinks: NavLink[] }) {
+export function Navbar({ navLinks, logoUrl }: { navLinks: NavLink[]; logoUrl?: string }) {
   const pathname = usePathname();
 
   return (
@@ -16,7 +16,7 @@ export function Navbar({ navLinks }: { navLinks: NavLink[] }) {
       <div className="flex h-full w-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="ml-15 flex shrink-0 items-center gap-3">
           <div className="relative h-16 w-24 overflow-hidden sm:w-28">
-            <Image src="/logo-full.png" alt="Millimed" fill sizes="(min-width: 640px) 112px, 96px" className="scale-125 object-contain" priority />
+            <Image src={logoUrl || "/logo-full.png"} alt="Millimed" fill unoptimized={Boolean(logoUrl)} sizes="(min-width: 640px) 112px, 96px" className="scale-125 object-contain" priority />
           </div>
         </Link>
 

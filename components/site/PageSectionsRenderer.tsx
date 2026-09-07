@@ -6,7 +6,7 @@ import { ArticlesGrid } from "@/components/home/ArticlesGrid";
 import { BlockBodyText } from "@/components/site/BlockBodyText";
 import { getActiveBanners } from "@/lib/queries/banners";
 import { getLatestNews, getLatestArticles, getArticlesByCategory } from "@/lib/queries/posts";
-import { cn } from "@/lib/utils";
+import { cn, toYoutubeEmbedUrl } from "@/lib/utils";
 import type { PageSectionData } from "@/lib/queries/pages";
 
 function visibilityClass(section: PageSectionData) {
@@ -38,18 +38,31 @@ async function renderSection(section: PageSectionData) {
       return null;
     case "COMPANY_INTRO":
     case "CUSTOM":
-    default:
-      if (!section.titleTh && !section.bodyTh && !section.imageUrl) return null;
+    default: {
+      if (!section.titleTh && !section.bodyTh && !section.imageUrl && !section.videoUrl) return null;
+      const embedUrl = section.videoUrl ? toYoutubeEmbedUrl(section.videoUrl) : null;
       return (
         <section className="py-14 sm:py-20">
           <Container className="flex flex-col items-center gap-4 text-center">
             {section.titleTh && (
               <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">{section.titleTh}</h2>
             )}
-            {section.imageUrl && (
-              <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-2xl">
-                <Image src={section.imageUrl} alt={section.titleTh ?? ""} fill unoptimized sizes="(min-width: 768px) 672px, 100vw" className="object-cover" />
+            {embedUrl ? (
+              <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-2xl bg-slate-900">
+                <iframe
+                  src={embedUrl}
+                  title={section.titleTh ?? "วิดีโอ"}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full"
+                />
               </div>
+            ) : (
+              section.imageUrl && (
+                <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-2xl">
+                  <Image src={section.imageUrl} alt={section.titleTh ?? ""} fill unoptimized sizes="(min-width: 768px) 672px, 100vw" className="object-cover" />
+                </div>
+              )
             )}
             {section.bodyTh && (
               <BlockBodyText
@@ -60,6 +73,7 @@ async function renderSection(section: PageSectionData) {
           </Container>
         </section>
       );
+    }
   }
 }
 

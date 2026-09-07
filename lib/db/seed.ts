@@ -4,7 +4,6 @@ import {
   sequelize,
   User,
   ArticleCategory,
-  Post,
   ProductCategory,
   Product,
   Page,
@@ -26,8 +25,6 @@ import {
 import { getOrCreateMedia } from "../media";
 import { navLinks, type NavLink as NavLinkData } from "../../data/nav";
 import { products } from "../../data/products";
-import { newsItems } from "../../data/news";
-import { articleItems } from "../../data/articles";
 
 async function seedAdminUser() {
   const email = process.env.SEED_ADMIN_EMAIL || "admin@millimedthailand.com";
@@ -220,69 +217,20 @@ async function seedProducts(categoryMap: Map<string, string>) {
   console.log("Products seeded.");
 }
 
-const ARTICLE_CATEGORY_BY_SLUG: Record<string, string> = {
-  "how-to-care-for-dry-eyes": "eye-health",
-  "eye-strain-prevention": "eye-health",
-  "eye-drops-usage-guide": "eye-health",
-  "skin-hydration-tips": "skin-beauty",
-  "choosing-the-right-moisturizer": "skin-beauty",
-  "sensitive-skin-care-basics": "skin-beauty",
-  "understanding-gmp-standards": "manufacturing",
-  "pharma-quality-control": "manufacturing",
-};
-
 async function seedArticleCategories() {
   const count = await ArticleCategory.count();
-  if (count > 0) return new Map<string, string>();
+  if (count > 0) return;
 
   const defs = [
     { slug: "eye-health", nameTh: "สุขภาพดวงตา" },
     { slug: "skin-beauty", nameTh: "ผิวพรรณและความงาม" },
     { slug: "manufacturing", nameTh: "มาตรฐานการผลิต" },
   ];
-  const map = new Map<string, string>();
   let order = 0;
   for (const def of defs) {
-    const category = await ArticleCategory.create({ nameTh: def.nameTh, slug: def.slug, order: order++ });
-    map.set(def.slug, category.id);
+    await ArticleCategory.create({ nameTh: def.nameTh, slug: def.slug, order: order++ });
   }
   console.log("Article categories seeded.");
-  return map;
-}
-
-async function seedPosts(categoryMap: Map<string, string>) {
-  const count = await Post.count();
-  if (count > 0) return;
-
-  for (const news of newsItems) {
-    const media = await getOrCreateMedia(news.image);
-    await Post.create({
-      kind: "NEWS",
-      slug: news.slug,
-      status: "PUBLISHED",
-      titleTh: news.title,
-      excerptTh: news.excerpt,
-      bodyTh: news.bodyTh,
-      publishedAt: new Date(news.publishedAt),
-      coverImageId: media.id,
-    });
-  }
-
-  for (const article of articleItems) {
-    const categorySlug = ARTICLE_CATEGORY_BY_SLUG[article.slug];
-    const media = await getOrCreateMedia(article.image);
-    await Post.create({
-      kind: "ARTICLE",
-      slug: article.slug,
-      status: "PUBLISHED",
-      titleTh: article.title,
-      bodyTh: article.bodyTh,
-      categoryId: categorySlug ? categoryMap.get(categorySlug) : null,
-      publishedAt: new Date(),
-      coverImageId: media.id,
-    });
-  }
-  console.log("Posts (news + articles) seeded.");
 }
 
 async function seedBanners() {
@@ -365,8 +313,7 @@ async function main() {
   await seedWidgets();
   const productCategoryMap = await seedProductCategories();
   await seedProducts(productCategoryMap);
-  const articleCategoryMap = await seedArticleCategories();
-  await seedPosts(articleCategoryMap);
+  await seedArticleCategories();
   await seedBanners();
   await seedPages();
 

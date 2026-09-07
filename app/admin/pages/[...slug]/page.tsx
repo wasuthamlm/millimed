@@ -43,7 +43,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
   const articleCategories = categories.map((c) => ({ id: c.id, nameTh: c.nameTh, count: countByCategory.get(c.id) ?? 0 }));
 
   const initialSections = sections.map((s) => {
-    const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string; categoryId?: string };
+    const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string; videoUrl?: string; categoryId?: string };
     return {
       id: s.id,
       type: s.type,
@@ -52,6 +52,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
       bodyTh: s.bodyTh ?? "",
       anchorId: config.anchorId ?? "",
       imageUrl: config.imageUrl ?? "",
+      videoUrl: config.videoUrl ?? "",
       categoryId: config.categoryId ?? null,
       itemsToShow: s.itemsToShow,
       columns: s.columns,

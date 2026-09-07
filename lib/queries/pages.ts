@@ -14,6 +14,7 @@ export type PageSectionData = {
   visibleMobile: boolean;
   anchorId: string | null;
   imageUrl: string | null;
+  videoUrl: string | null;
   categoryId: string | null;
 };
 
@@ -33,7 +34,7 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
     slug: page.slug,
     titleTh: page.titleTh,
     sections: sections.map((s) => {
-      const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string; categoryId?: string };
+      const config = (s.config ?? {}) as { anchorId?: string; imageUrl?: string; videoUrl?: string; categoryId?: string };
       return {
         id: s.id,
         order: s.order,
@@ -48,6 +49,7 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
         visibleMobile: s.visibleMobile,
         anchorId: config.anchorId || null,
         imageUrl: config.imageUrl || null,
+        videoUrl: config.videoUrl || null,
         categoryId: config.categoryId || null,
       };
     }),

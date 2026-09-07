@@ -135,6 +135,17 @@ export function SectionSettingsPanel({
                 className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-navy"
               />
             </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-slate-500">URL วิดีโอ (YouTube)</label>
+              <input
+                type="text"
+                value={section.videoUrl}
+                onChange={(e) => onChange({ videoUrl: e.target.value })}
+                placeholder="วางลิงก์ YouTube เช่น https://www.youtube.com/watch?v=..."
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-navy"
+              />
+              <p className="mt-1 text-xs text-slate-400">ถ้าใส่ลิงก์วิดีโอ จะแสดงวิดีโอแทนรูปภาพด้านบน</p>
+            </div>
           </>
         )}
 

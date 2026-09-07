@@ -10,6 +10,7 @@ export type PageSectionRow = {
   bodyTh: string;
   anchorId: string;
   imageUrl: string;
+  videoUrl: string;
   categoryId: string | null;
   itemsToShow: number | null;
   columns: number | null;
