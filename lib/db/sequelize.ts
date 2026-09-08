@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import pg from "pg";
 
 const globalForSequelize = globalThis as unknown as { sequelize?: Sequelize };
 
@@ -15,6 +16,7 @@ export const sequelize =
   globalForSequelize.sequelize ??
   new Sequelize(databaseUrl, {
     dialect: "postgres",
+    dialectModule: pg,
     logging: false,
     dialectOptions: isLocalHost
       ? undefined
