@@ -2,8 +2,14 @@ import { Sequelize } from "sequelize";
 
 const globalForSequelize = globalThis as unknown as { sequelize?: Sequelize };
 
-const databaseUrl = process.env.DATABASE_URL as string;
-const isLocalHost = /^(postgres(ql)?:\/\/)?[^@]*@?(localhost|127\.0\.0\.1)/.test(databaseUrl ?? "");
+const databaseUrl = process.env.DATABASE_URL?.trim();
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is not set in this environment");
+}
+if (!/^postgres(ql)?:\/\//.test(databaseUrl)) {
+  throw new Error('DATABASE_URL must start with "postgres://" or "postgresql://" — check for stray quotes or whitespace in the env var value');
+}
+const isLocalHost = /^(postgres(ql)?:\/\/)?[^@]*@?(localhost|127\.0\.0\.1)/.test(databaseUrl);
 
 export const sequelize =
   globalForSequelize.sequelize ??
