@@ -14,7 +14,7 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
   const pathname = usePathname();
 
   return (
-    <div className="lg:hidden">
+    <div className="md:hidden">
       <button
         type="button"
         aria-label="เปิดเมนู"
@@ -39,7 +39,7 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "tween", duration: 0.25 }}
-              className="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-white p-5 shadow-xl"
+              className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] overflow-y-auto bg-white p-5 shadow-xl"
             >
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-lg font-bold text-brand-navy">เมนู</span>

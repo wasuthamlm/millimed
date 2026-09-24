@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import type { PageSectionRow } from "./types";
 import type { NavLink } from "@/data/nav";
 import type { FooterColumnData, FooterContactData, FooterConfigData } from "@/lib/queries/footer";
-import type { SiteSocialData } from "@/lib/queries/site-settings";
 import type { ArticleItem } from "@/data/articles";
 import type { NewsItem } from "@/data/news";
 import type { HeroBannerItem } from "@/components/home/HeroBanners";
@@ -44,7 +43,6 @@ export function PreviewModal({
   footerColumns,
   footerContact,
   footerConfig,
-  social,
 }: {
   sections: PageSectionRow[];
   onClose: () => void;
@@ -55,7 +53,6 @@ export function PreviewModal({
   footerColumns: FooterColumnData[];
   footerContact: FooterContactData | null;
   footerConfig: FooterConfigData | null;
-  social: SiteSocialData | null;
 }) {
   const [device, setDevice] = useState<Device>("desktop");
 
@@ -103,7 +100,7 @@ export function PreviewModal({
                   previewBanners={previewBanners}
                 />
               ))}
-            <Footer columns={footerColumns} contact={footerContact} config={footerConfig} social={social} />
+            <Footer columns={footerColumns} contact={footerContact} config={footerConfig} />
           </div>
         </div>
       </div>

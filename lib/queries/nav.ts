@@ -1,17 +1,18 @@
 import { NavLink as NavLinkModel } from "@/lib/db/models/index";
 import type { NavLink } from "@/data/nav";
-import { getLatestNews } from "./posts";
 
-const NEWS_DROPDOWN_LIMIT = 8;
+const NEWS_CATEGORY_LINKS = [
+  { label: "ข่าวสารบริษัท", href: "/news?category=company" },
+  { label: "กิจกรรมเพื่อสังคม", href: "/news?category=csr" },
+  { label: "กิจกรรมภายใน", href: "/news?category=internal" },
+  { label: "ดูข่าวทั้งหมด", href: "/news" },
+];
 
 export async function getHeaderNavLinks(): Promise<NavLink[]> {
-  const [rows, latestNews] = await Promise.all([
-    NavLinkModel.findAll({
-      where: { placement: "HEADER", active: true },
-      order: [["order", "ASC"]],
-    }),
-    getLatestNews(NEWS_DROPDOWN_LIMIT),
-  ]);
+  const rows = await NavLinkModel.findAll({
+    where: { placement: "HEADER", active: true },
+    order: [["order", "ASC"]],
+  });
 
   const topLevel = rows.filter((r) => !r.parentId);
   const childrenByParent = new Map<string, NavLinkModel[]>();
@@ -23,17 +24,13 @@ export async function getHeaderNavLinks(): Promise<NavLink[]> {
   }
 
   return topLevel.map((row) => {
-    // "ข่าวสารและกิจกรรม" has no manually-curated submenu — its dropdown mirrors the
-    // old site's behavior of always showing the latest news, not a static list that
-    // would go stale the moment a new item is published from the admin.
-    if (row.href === "/news" && latestNews.length > 0) {
+    // "ข่าวสารและกิจกรรม" dropdown links to the unified news/activities categories
+    // (ข่าวสารบริษัท / กิจกรรมเพื่อสังคม / กิจกรรมภายใน) rather than a curated submenu.
+    if (row.href === "/news") {
       return {
         label: row.labelTh,
         href: row.href,
-        children: [
-          ...latestNews.map((n) => ({ label: n.title, href: `/news/${n.slug}` })),
-          { label: "ดูข่าวทั้งหมด", href: "/news" },
-        ],
+        children: NEWS_CATEGORY_LINKS,
       };
     }
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { WhereOptions } from "sequelize";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { Pager } from "@/components/admin/Pager";
+import { Pager } from "@/components/ui/Pager";
 import { MailIcon } from "@/components/ui/admin-icons";
 import { MessageFilters } from "@/components/admin/messages/MessageFilters";
 import { MessageStatusCell } from "@/components/admin/messages/MessageStatusCell";

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Op, type WhereOptions } from "sequelize";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { Pager } from "@/components/admin/Pager";
+import { Pager } from "@/components/ui/Pager";
 import { BoxIcon, PlusIcon, ArchiveIcon } from "@/components/ui/admin-icons";
 import { ProductFilters } from "@/components/admin/products/ProductFilters";
 import { ProductStatusCell } from "@/components/admin/products/ProductStatusCell";

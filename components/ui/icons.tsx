@@ -65,6 +65,15 @@ export function Calendar({ className }: IconProps) {
   );
 }
 
+export function PlayCircle({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <circle cx={12} cy={12} r={10} stroke="currentColor" strokeWidth={1.5} fill="currentColor" fillOpacity={0.15} />
+      <path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function ArrowUp({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">

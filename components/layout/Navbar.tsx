@@ -20,7 +20,7 @@ export function Navbar({ navLinks, logoUrl }: { navLinks: NavLink[]; logoUrl?: s
           </div>
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-10 overflow-x-auto [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden">
           {navLinks.map((link) => {
             const active = pathname === link.href;
             if (link.children) {

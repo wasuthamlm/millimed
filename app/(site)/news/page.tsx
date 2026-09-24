@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { NewsHero } from "@/components/news/NewsHero";
 import { NewsGrid } from "@/components/news/NewsGrid";
-import { getLatestNews } from "@/lib/queries/posts";
+import { NewsCategoryTabs } from "@/components/news/NewsCategoryTabs";
+import { Pager } from "@/components/ui/Pager";
+import { getNewsAndActivities, type NewsCategoryFilter } from "@/lib/queries/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +13,25 @@ export const metadata: Metadata = {
   alternates: { canonical: "/news" },
 };
 
-export default async function NewsPage() {
-  const newsItems = await getLatestNews(50);
-  const [featured, ...rest] = newsItems;
+const PAGE_SIZE = 12;
+const VALID_CATEGORIES: NewsCategoryFilter[] = ["all", "company", "csr", "internal"];
+
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; category?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const category = VALID_CATEGORIES.includes(params.category as NewsCategoryFilter)
+    ? (params.category as NewsCategoryFilter)
+    : "all";
+
+  const { items, totalPages } = await getNewsAndActivities({ page, pageSize: PAGE_SIZE, category });
+
+  const showHero = category === "all" && page === 1;
+  const featured = showHero ? items[0] : undefined;
+  const rest = showHero ? items.slice(1) : items;
 
   return (
     <div className="bg-slate-50">
@@ -26,8 +44,16 @@ export default async function NewsPage() {
           </p>
         </div>
 
+        <NewsCategoryTabs active={category} />
+
         {featured && <NewsHero item={featured} />}
-        {rest.length > 0 && <NewsGrid items={rest} />}
+        {rest.length > 0 ? (
+          <NewsGrid items={rest} />
+        ) : (
+          !featured && <p className="py-10 text-center text-slate-500">ยังไม่มีข่าวสารในหมวดนี้</p>
+        )}
+
+        <Pager page={page} totalPages={totalPages} basePath="/news" extraParams={{ category: category === "all" ? undefined : category }} />
       </Container>
     </div>
   );

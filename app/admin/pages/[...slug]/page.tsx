@@ -6,7 +6,6 @@ import { getLatestArticles, getLatestNews } from "@/lib/queries/posts";
 import { getActiveBanners } from "@/lib/queries/banners";
 import { getHeaderNavLinks } from "@/lib/queries/nav";
 import { getFooterData } from "@/lib/queries/footer";
-import { getSiteSocial } from "@/lib/queries/site-settings";
 import { calculateSeoAeoGeo, pageToScoreInput } from "@/lib/seo-score";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +17,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
   const page = await Page.findOne({ where: { slug } });
   if (!page) notFound();
 
-  const [sections, previewArticles, previewNews, previewBanners, navLinks, footerData, social, navLinkCount, articleCount, newsCount, categories, categoryCounts] =
+  const [sections, previewArticles, previewNews, previewBanners, navLinks, footerData, navLinkCount, articleCount, newsCount, categories, categoryCounts] =
     await Promise.all([
       PageSection.findAll({ where: { pageId: page.id }, order: [["order", "ASC"]] }),
       getLatestArticles(100),
@@ -26,7 +25,6 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
       getActiveBanners(),
       getHeaderNavLinks(),
       getFooterData(),
-      getSiteSocial(),
       NavLink.count({ where: { href: slug === "home" ? "/" : `/${slug}` } }),
       Post.count({ where: { kind: "ARTICLE", status: "PUBLISHED" } }),
       Post.count({ where: { kind: "NEWS", status: "PUBLISHED" } }),
@@ -102,7 +100,6 @@ export default async function EditPagePage({ params }: { params: Promise<{ slug:
       footerColumns={footerData.columns}
       footerContact={footerData.contact}
       footerConfig={footerData.config}
-      social={social}
     />
   );
 }

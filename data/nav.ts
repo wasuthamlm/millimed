@@ -28,23 +28,6 @@ export const navLinks: NavLink[] = [
       { label: "CYSTERINE", href: "/advertisements/cysterine" },
     ],
   },
-  {
-    label: "กิจกรรมเพื่อสังคม",
-    href: "#",
-    children: [
-      { label: "มิลลิเมดปันน้ำใจ", href: "/csr/sharing-love" },
-      { label: "มิลลิเมดเพื่อการศึกษา", href: "/csr/education" },
-    ],
-  },
-  {
-    label: "กิจกรรมภายใน",
-    href: "#",
-    children: [
-      { label: "Kick off & Outing", href: "/internal-activities/kick-off-outing" },
-      { label: "มิลลิเมดเพื่อพนักงานและครอบครัว", href: "/internal-activities/family" },
-      { label: "สันทนาการและอื่นๆ", href: "/internal-activities/recreation" },
-    ],
-  },
   { label: "ร่วมงานกับเรา", href: "/careers" },
   { label: "ติดต่อเรา", href: "/contact" },
 ];

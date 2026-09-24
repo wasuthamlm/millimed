@@ -10,7 +10,8 @@
     "db:sync": "tsx lib/db/sync.ts",
     "db:seed": "tsx lib/db/seed.ts",
     "db:backup": "tsx scripts/backup-sync.ts",
-    "import-legacy": "tsx scripts/import-legacy-site.ts"
+    "import-legacy": "tsx scripts/import-legacy-site.ts",
+    "clean:post-body": "tsx scripts/strip-post-body-html.ts"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.20",

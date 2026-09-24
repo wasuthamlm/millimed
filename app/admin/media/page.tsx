@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/admin/PageHeader";
-import { Pager } from "@/components/admin/Pager";
+import { Pager } from "@/components/ui/Pager";
 import { ImageIcon } from "@/components/ui/admin-icons";
 import { FolderList } from "@/components/admin/media/FolderList";
 import { MediaGrid } from "@/components/admin/media/MediaGrid";

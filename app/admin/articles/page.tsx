@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Op, type WhereOptions } from "sequelize";
 import { PageHeader } from "@/components/admin/PageHeader";
-import { Pager } from "@/components/admin/Pager";
+import { Pager } from "@/components/ui/Pager";
 import { FileTextIcon, PlusIcon } from "@/components/ui/admin-icons";
 import { ArticleFilters } from "@/components/admin/articles/ArticleFilters";
 import { PostStatusCell } from "@/components/admin/articles/PostStatusCell";

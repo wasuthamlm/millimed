@@ -8,7 +8,7 @@ import type { NewsItem } from "@/data/news";
 
 export function NewsFeatured({ item }: { item: NewsItem }) {
   return (
-    <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+    <motion.div key={item.slug} variants={fadeInUp} initial="hidden" animate="visible">
       <Link
         href={`/news/${item.slug}`}
         className="group block overflow-hidden rounded-2xl border border-slate-100 shadow-sm transition-shadow hover:shadow-lg"

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { HeroBanners } from "@/components/home/HeroBanners";
 import { LatestNews } from "@/components/home/LatestNews";
-import { ArticlesGrid } from "@/components/home/ArticlesGrid";
+import { ActivitiesSection } from "@/components/home/ActivitiesSection";
+import { AdvertisementsSection } from "@/components/home/AdvertisementsSection";
 import { getActiveBanners } from "@/lib/queries/banners";
-import { getLatestNews, getLatestArticles } from "@/lib/queries/posts";
+import { getLatestNews, getLatestActivities } from "@/lib/queries/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -12,17 +13,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [banners, news, articles] = await Promise.all([
+  const [banners, news, activities] = await Promise.all([
     getActiveBanners(),
     getLatestNews(3),
-    getLatestArticles(8),
+    getLatestActivities(6),
   ]);
 
   return (
     <>
       <HeroBanners banners={banners} />
       <LatestNews items={news} />
-      <ArticlesGrid items={articles} />
+      <ActivitiesSection items={activities} />
+      <AdvertisementsSection />
     </>
   );
 }

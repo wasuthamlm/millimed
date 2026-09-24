@@ -8,7 +8,7 @@ import { formatThaiDate } from "@/lib/utils";
 import { Calendar, ArrowRight } from "@/components/ui/icons";
 import type { NewsItem } from "@/data/news";
 
-export function NewsGridCard({ item }: { item: NewsItem }) {
+export function NewsGridCard({ item, priority }: { item: NewsItem; priority?: boolean }) {
   return (
     <motion.div variants={fadeInUp} className="h-full">
       <Link href={`/news/${item.slug}`} className="group block h-full">
@@ -22,6 +22,7 @@ export function NewsGridCard({ item }: { item: NewsItem }) {
               src={item.image}
               alt={item.title}
               fill
+              priority={priority}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />

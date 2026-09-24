@@ -29,10 +29,10 @@ export function ArticlesGrid({
       <Container className="flex flex-col gap-10">
         <SectionHeading title={title} centered />
         <motion.div
+          key={items.map((item) => item.slug).join(",")}
           variants={staggerContainer}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
+          animate="visible"
           className={cn("grid gap-6", COLUMN_CLASSES[columns] ?? COLUMN_CLASSES[4])}
         >
           {items.map((article) => (
